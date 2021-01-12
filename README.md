@@ -19,7 +19,10 @@ MEDIUM PROJECT
             "headLine": "string",
             "subHead": "string",
             "content": "string",
-            "category": "string",
+            "category": {
+                "name": "string",
+                "img": "string"
+            },
             "author": {
                 "name": "string",
                 "img": "string"
