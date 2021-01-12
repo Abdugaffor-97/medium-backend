@@ -1,4 +1,4 @@
-# medum-backend
+# medium-backend
 
 MEDIUM PROJECT
     Your wonderful TAs have created a frontend clone of the famous Medium application. You can find it here --> https://github.com/ubeytdemirr/medium-template
