@@ -29,7 +29,7 @@ const corsOptions = {
   },
 };
 
-// server.use(cors(corsOptions));
+server.use(cors(corsOptions));
 
 server.use("/article", articleRoutes);
 
@@ -39,7 +39,6 @@ server.use(notFoundHandler);
 server.use(genericErrorHandler);
 
 console.log(listEndpoints(server));
-console.log(process.env.DATABASE_URL);
 
 mongoose
   .connect(process.env.DATABASE_URL, {

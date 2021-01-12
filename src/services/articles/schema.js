@@ -18,4 +18,4 @@ const ArticleSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = model("article", ArticleSchema);
+module.exports = model("Article", ArticleSchema);

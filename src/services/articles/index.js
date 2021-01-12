@@ -6,11 +6,10 @@ const articleRouter = express.Router();
 articleRouter.post("/", async (req, res, next) => {
   try {
     const newArticle = new ArticleSchema(req.body);
-    console.log(newArticle);
+    newArticle.save();
     const { _id } = await newArticle;
-    res.status(201).send(newArticle);
+    res.status(201).send(_id);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 });
@@ -18,7 +17,6 @@ articleRouter.post("/", async (req, res, next) => {
 articleRouter.get("/", async (req, res, next) => {
   try {
     const articles = await ArticleSchema.find();
-    console.log(articles);
     if (articles.length) {
       res.send(articles);
     } else {
@@ -34,7 +32,6 @@ articleRouter.get("/", async (req, res, next) => {
 
 articleRouter.get("/:id", async (req, res, next) => {
   try {
-    console.log(req.params.id);
     const article = await ArticleSchema.findById(req.params.id);
     if (article) {
       res.send(article);
