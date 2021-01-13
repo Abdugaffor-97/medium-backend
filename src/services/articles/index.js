@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const ArticleModel = require("./schema");
+const q2m = require("query-to-mongo");
+const e = require("express");
 
 const articleRouter = express.Router();
 
@@ -120,9 +122,21 @@ articleRouter.post("/", async (req, res, next) => {
 
 articleRouter.get("/", async (req, res, next) => {
   try {
-    const articles = await ArticleModel.find();
+    const query = q2m(req.query);
+    console.log("req.params", req.query);
+
+    const totalArticles = await ArticleModel.countDocuments(query.criteria);
+
+    const articles = await ArticleModel.find(
+      query.criteria,
+      query.options.fields
+    )
+      .skip(query.options.skip)
+      .limit(query.options.limit)
+      .sort(query.options.sort);
+
     if (articles.length) {
-      res.send(articles);
+      res.send({ links: query.links("/articles", totalArticles), articles });
     } else {
       const error = new Error();
       error.httpStatusCode = 404;
