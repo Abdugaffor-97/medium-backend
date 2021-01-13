@@ -58,6 +58,16 @@ articleRouter.put("/:id/reviews/:reviewId", async (req, res, next) => {
 
 articleRouter.delete("/:id/reviews/:reviewId", async (req, res, next) => {
   try {
+    const updatedArticle = await ArticleModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $pull: {
+          reviews: { _id: mongoose.Types.ObjectId(req.params.reviewId) },
+        },
+      },
+      { new: true }
+    );
+    res.send(updatedArticle);
   } catch (error) {
     next(error);
   }
@@ -65,6 +75,12 @@ articleRouter.delete("/:id/reviews/:reviewId", async (req, res, next) => {
 
 articleRouter.get("/:id/reviews", async (req, res, next) => {
   try {
+    const { reviews } = await ArticleModel.findById(req.params.id, {});
+    if (reviews.length) {
+      res.send(reviews);
+    } else {
+      res.status(404).send("Reviews not exist");
+    }
   } catch (error) {
     next(error);
   }
@@ -72,6 +88,19 @@ articleRouter.get("/:id/reviews", async (req, res, next) => {
 
 articleRouter.get("/:id/reviews/:reviewId", async (req, res, next) => {
   try {
+    const { reviews } = await ArticleModel.findById(req.params.id, {
+      _id: 0,
+      reviews: {
+        $elemMatch: {
+          _id: mongoose.Types.ObjectId(req.params.reviewId),
+        },
+      },
+    });
+    if (reviews.length) {
+      res.send(reviews[0]);
+    } else {
+      res.status(404).send("Not found");
+    }
   } catch (error) {
     next(error);
   }
