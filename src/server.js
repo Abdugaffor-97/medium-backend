@@ -31,7 +31,7 @@ const corsOptions = {
 
 server.use(cors(corsOptions));
 
-server.use("/article", articleRoutes);
+server.use("/articles", articleRoutes);
 
 // ERROR HANDLERS
 server.use(badRequestHandler);

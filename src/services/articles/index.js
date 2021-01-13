@@ -1,11 +1,86 @@
 const express = require("express");
-const ArticleSchema = require("./schema");
+const mongoose = require("mongoose");
+const ArticleModel = require("./schema");
 
 const articleRouter = express.Router();
 
+// DAY 2
+articleRouter.post("/:id", async (req, res, next) => {
+  try {
+    const article = await ArticleModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $push: { reviews: req.body },
+      },
+      { runValidators: true, new: true }
+    );
+
+    res.send(article);
+  } catch (error) {
+    next(error);
+  }
+});
+
+articleRouter.put("/:id/reviews/:reviewId", async (req, res, next) => {
+  try {
+    const { reviews } = await ArticleModel.findById(req.params.id, {
+      _id: 0,
+      reviews: {
+        $elemMatch: {
+          _id: mongoose.Types.ObjectId(req.params.reviewId),
+        },
+      },
+    });
+
+    if (reviews.length) {
+      const updatedReview = { ...reviews[0].toObject(), ...req.body };
+      const modifiedArticle = await ArticleModel.findOneAndUpdate(
+        {
+          _id: mongoose.Types.ObjectId(req.params.id),
+          "reviews._id": mongoose.Types.ObjectId(req.params.reviewId),
+        },
+        { $set: { "reviews.$": updatedReview } },
+        {
+          runValidators: true,
+          new: true,
+        }
+      );
+
+      res.send(modifiedArticle);
+    } else {
+      res.status(404);
+      next();
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+articleRouter.delete("/:id/reviews/:reviewId", async (req, res, next) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+});
+
+articleRouter.get("/:id/reviews", async (req, res, next) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+});
+
+articleRouter.get("/:id/reviews/:reviewId", async (req, res, next) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+});
+
+// DAY 1
 articleRouter.post("/", async (req, res, next) => {
   try {
-    const newArticle = new ArticleSchema(req.body);
+    const newArticle = new ArticleModel(req.body);
     newArticle.save();
     const { _id } = await newArticle;
     res.status(201).send(_id);
@@ -16,7 +91,7 @@ articleRouter.post("/", async (req, res, next) => {
 
 articleRouter.get("/", async (req, res, next) => {
   try {
-    const articles = await ArticleSchema.find();
+    const articles = await ArticleModel.find();
     if (articles.length) {
       res.send(articles);
     } else {
@@ -32,7 +107,7 @@ articleRouter.get("/", async (req, res, next) => {
 
 articleRouter.get("/:id", async (req, res, next) => {
   try {
-    const article = await ArticleSchema.findById(req.params.id);
+    const article = await ArticleModel.findById(req.params.id);
     if (article) {
       res.send(article);
     } else {
@@ -48,7 +123,7 @@ articleRouter.get("/:id", async (req, res, next) => {
 
 articleRouter.delete("/:id", async (req, res, next) => {
   try {
-    const article = await ArticleSchema.findOneAndDelete(req.params.id);
+    const article = await ArticleModel.findOneAndDelete(req.params.id);
     if (article) {
       res.send("Deleted");
     } else {
@@ -62,9 +137,9 @@ articleRouter.delete("/:id", async (req, res, next) => {
   }
 });
 
-articleRouter.delete("/:id", async (req, res, next) => {
+articleRouter.put("/:id", async (req, res, next) => {
   try {
-    const article = await ArticleSchema.findOneAndUpdate(
+    const article = await ArticleModel.findByIdAndUpdate(
       req.params.id,
       req.body,
       { runValidators: true, new: true }
