@@ -12,7 +12,7 @@ articleRouter.post("/:id", async (req, res, next) => {
     const article = await ArticleModel.findByIdAndUpdate(
       req.params.id,
       {
-        $push: { reviews: req.body },
+        $push: { reviews: { ...req.body, createdAt: new Date() } },
       },
       { runValidators: true, new: true }
     );
@@ -35,7 +35,11 @@ articleRouter.put("/:id/reviews/:reviewId", async (req, res, next) => {
     });
 
     if (reviews.length) {
-      const updatedReview = { ...reviews[0].toObject(), ...req.body };
+      const updatedReview = {
+        ...reviews[0].toObject(),
+        ...req.body,
+        updatedAt: new Date(),
+      };
       const modifiedArticle = await ArticleModel.findOneAndUpdate(
         {
           _id: mongoose.Types.ObjectId(req.params.id),
@@ -123,8 +127,6 @@ articleRouter.post("/", async (req, res, next) => {
 articleRouter.get("/", async (req, res, next) => {
   try {
     const query = q2m(req.query);
-    console.log("req.params", req.query);
-
     const totalArticles = await ArticleModel.countDocuments(query.criteria);
 
     const articles = await ArticleModel.find(
@@ -134,7 +136,7 @@ articleRouter.get("/", async (req, res, next) => {
       .skip(query.options.skip)
       .limit(query.options.limit)
       .sort(query.options.sort);
-
+    console.log("req.query", req.query);
     if (articles.length) {
       res.send({ links: query.links("/articles", totalArticles), articles });
     } else {

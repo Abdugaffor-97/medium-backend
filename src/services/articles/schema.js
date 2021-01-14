@@ -16,8 +16,10 @@ const ArticleSchema = new Schema(
     cover: String,
     reviews: [
       {
-        text: String,
-        user: String,
+        text: { type: String, required: true },
+        user: { type: String, required: true },
+        createdAt: { type: Date, required: false },
+        updatedAt: { type: Date, required: false },
       },
     ],
   },
