@@ -1,10 +1,58 @@
-const express = require("express");
+const { Router } = require("express");
 const mongoose = require("mongoose");
 const ArticleModel = require("./schema");
 const q2m = require("query-to-mongo");
-const e = require("express");
 
-const articleRouter = express.Router();
+const articleRouter = Router();
+
+// DAY 3
+
+articleRouter.delete("/:id/claps", async (req, res, next) => {
+  try {
+    const { claps } = await ArticleModel.findByIdAndUpdate(
+      req.params.id,
+      { $pull: { claps: req.body.userId } },
+      {
+        runValidators: true,
+        new: true,
+      }
+    );
+    res.status(201).send(claps);
+  } catch (error) {
+    next(error);
+  }
+});
+
+articleRouter.post("/:id/claps", async (req, res, next) => {
+  try {
+    const { claps } = await ArticleModel.findByIdAndUpdate(
+      req.params.id,
+      { $push: { claps: req.body.userId } },
+      {
+        runValidators: true,
+        new: true,
+      }
+    );
+    res.status(201).send(claps);
+  } catch (error) {
+    next(error);
+  }
+});
+
+articleRouter.get("/:id/claps", async (req, res, next) => {
+  try {
+    const { claps } = await ArticleModel.findById(req.params.id);
+    console.log(claps);
+    if (claps.length) {
+      res.send(claps);
+    } else {
+      res.status(401);
+      next();
+    }
+  } catch (error) {
+    next(error);
+  }
+});
 
 // DAY 2
 articleRouter.post("/:id", async (req, res, next) => {

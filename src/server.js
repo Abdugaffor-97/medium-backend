@@ -4,6 +4,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 const articleRoutes = require("./services/articles");
+const userRoutes = require("./services/users");
 
 const {
   notFoundHandler,
@@ -32,6 +33,7 @@ const corsOptions = {
 server.use(cors(corsOptions));
 
 server.use("/articles", articleRoutes);
+server.use("/users", userRoutes);
 
 // ERROR HANDLERS
 server.use(badRequestHandler);

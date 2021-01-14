@@ -22,6 +22,7 @@ const ArticleSchema = new Schema(
         updatedAt: { type: Date, required: false },
       },
     ],
+    claps: [{ type: Schema.Types.ObjectId, ref: "User", unique: true }],
   },
   { timestamps: true }
 );
