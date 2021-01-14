@@ -3,9 +3,9 @@
 Day 1
 
 MEDIUM PROJECT
-    Your wonderful TAs have created a frontend clone of the famous Medium application. You can find it here --> https://github.com/ubeytdemirr/medium-template
-    In every page's folder you should find some guidelines to properly use this frontend
-    
+Your wonderful TAs have created a frontend clone of the famous Medium application. You can find it here --> https://github.com/ubeytdemirr/medium-template
+In every page's folder you should find some guidelines to properly use this frontend
+
     Your task is to build a proper backend being able to communicate with it. Backend needs to grant data persistance via MongoDB
     //BACKEND
     Your backend should have the following routes included:
@@ -15,7 +15,7 @@ MEDIUM PROJECT
     PUT /articles/:id => edit the article with the given id
     DELETE /articles/:id => delete the article with the given id
     Article:
-    
+
         {
             "_id": "string", // server generated
             "headLine": "string",
@@ -37,7 +37,7 @@ MEDIUM PROJECT
 Day 2
 
     MEDIUM PROJECT
-    Today you continue building Medium API. 
+    Today you continue building Medium API.
     Backend needs to grant data persistance via MongoDB
     //BACKEND
     Your backend should now have the possibility to add a review to an
@@ -49,33 +49,32 @@ Day 2
     PUT /articles/:id/reviews/:reviewId => edit the review belonging to the specified article
     DELETE /articles/:id/reviews/:reviewId => delete the review belonging to the specified article
     A review will look like:
-    
+
         {
             "text": "string",
             "user": "string"
         }
-        
+
     [EXTRA]
-    
+
     Add pagination
     Add the possibility to search by title or by content with the same text field
-    
-    
+
 Day 3
 
-Today you continue building Medium API. 
-    Backend needs to grant data persistance via MongoDB
-    //BACKEND
-    Your backend should now save authors in their own collection, therefore you should
-    link articles to their corresponding author and you should have CRUD for authors.
-    Complete past homework :)
-    
+Today you continue building Medium API.
+Backend needs to grant data persistance via MongoDB
+//BACKEND
+Your backend should now save authors in their own collection, therefore you should
+link articles to their corresponding author and you should have CRUD for authors.
+Complete past homework :)
+
     [EXTRAS]
-    Claps system. 
-   Claps should be an array of user ids that is attached on the article schema.
-    Whenever you click on the clap button add the id of the user to that array. 
-    Therefore you know if someone clapped or not by checking if it is in the array! 
-     You can check length of array to get total claps , its simple!
-   [EXTRA OF EXTRA] 
-    Check how many YOU clapped! 
+    Claps system.
+    Claps should be an array of user ids that is attached on the article schema.
+    Whenever you click on the clap button add the id of the user to that array.
+    Therefore you know if someone clapped or not by checking if it is in the array!
+        You can check length of array to get total claps , its simple!
+    [EXTRA OF EXTRA]
+    Check how many YOU clapped!
     and if you clapped make clap button blue :slight_smile:
