@@ -21,8 +21,7 @@ UserSchema.methods.toJSON = function () {
 };
 
 UserSchema.statics.findByCredentials = async (email, password) => {
-  const user = await this.findOne({ email });
-
+  const user = await UserModel.findOne({ email });
   if (user) {
     const isMatch = await bcrypt.compare(password, user.password);
 
@@ -44,4 +43,6 @@ UserSchema.pre("save", async function (next) {
   next();
 });
 
-module.exports = model("User", UserSchema);
+const UserModel = model("User", UserSchema);
+
+module.exports = UserModel;

@@ -1,8 +1,7 @@
 const jwt = require("jsonwebtoken");
-const { use } = require("../users");
 const UserModel = require("../users/schema");
 
-const generateJWT = (payload) => {
+const generateJWT = (payload) =>
   new Promise((res, rej) => {
     jwt.sign(
       payload,
@@ -14,9 +13,8 @@ const generateJWT = (payload) => {
       }
     );
   });
-};
 
-const generateRefreshJWT = (payload) => {
+const generateRefreshJWT = (payload) =>
   new Promise((res, rej) => {
     jwt.sign(
       payload,
@@ -28,19 +26,25 @@ const generateRefreshJWT = (payload) => {
       }
     );
   });
-};
 
-const authenticate = async (user) => {
+const getAccessAndRefreshToken = async (user) => {
   try {
-    const newAccessToken = await generateJWT({ _id: user._id });
-    const newRefreshToken = await generateRefreshJWT({ _id: user._id });
-
-    user.refreshTokens = user.refreshTokens.concat({ token: newRefreshToken });
+    const accessToken = await generateJWT({ _id: user._id });
+    const refreshToken = await generateRefreshJWT({ _id: user._id });
+    user.refreshTokens = user.refreshTokens.concat({ token: refreshToken });
 
     await user.save();
 
-    return { token: newAccessToken, refreshToken: newRefreshToken };
-  } catch (error) {}
+    console.log(`
+    refreshToken
+    ============================
+    ${refreshToken}
+    `);
+
+    return { accessToken, refreshToken };
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
 const verifyJWT = (token) => {
@@ -69,4 +73,4 @@ const refreshToken = async (oldRefreshToken) => {
   if (!user) throw Error("Access is forbiden");
 };
 
-module.exports = { verifyJWT, authenticate, refreshToken };
+module.exports = { verifyJWT, getAccessAndRefreshToken, refreshToken };

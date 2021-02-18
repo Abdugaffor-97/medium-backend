@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { authorize } = require("../auth/middleware");
-const {} = require("../auth/tools");
+const { getAccessAndRefreshToken } = require("../auth/tools");
 const UserModel = require("./schema");
 
 const userRouter = Router();
@@ -46,7 +46,8 @@ userRouter.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await UserModel.findByCredentials(email, password);
-    const tokens = await authenticate(user);
+
+    const tokens = await getAccessAndRefreshToken(user);
     res.send(tokens);
   } catch (error) {
     next(error);
