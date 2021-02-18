@@ -2,6 +2,7 @@ const express = require("express");
 const listEndpoints = require("express-list-endpoints");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const oauth = require("./services/auth/oauth");
 
 const articleRoutes = require("./services/articles");
 const userRoutes = require("./services/users");
