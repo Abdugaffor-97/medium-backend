@@ -5,8 +5,9 @@ const UserSchema = new Schema({
   username: { type: String, required: true },
   surname: String,
   email: String,
-  password: { type: String, required: true },
+  password: String,
   articles: [{ type: Schema.Types.ObjectId, ref: "Article" }],
+  refreshTokens: [{ token: String }],
 });
 
 UserSchema.methods.toJSON = function () {
