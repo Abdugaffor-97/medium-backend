@@ -1,9 +1,37 @@
 const { Router } = require("express");
+const { authorize } = require("../auth/middleware");
 const UserModel = require("./schema");
 
 const userRouter = Router();
 
-userRouter.post("/", async (req, res, next) => {
+// userRouter.post("/", async (req, res, next) => {
+//   try {
+//     const newUser = new UserModel(req.body);
+//     const { _id } = await newUser.save();
+//     res.status(201).send(_id);
+//   } catch (error) {
+//     next(error);
+//   }
+// });
+
+userRouter.get("/", authorize, async (req, res, next) => {
+  try {
+    const users = await UserModel.find();
+    res.send(users);
+  } catch (error) {
+    next(error);
+  }
+});
+
+userRouter.get("/me", authorize, async (req, res, next) => {
+  try {
+    res.send(req.user);
+  } catch (error) {
+    next(error);
+  }
+});
+
+userRouter.post("/register", async (req, res, next) => {
   try {
     const newUser = new UserModel(req.body);
     const { _id } = await newUser.save();
@@ -13,10 +41,12 @@ userRouter.post("/", async (req, res, next) => {
   }
 });
 
-userRouter.get("/", async (req, res, next) => {
+userRouter.post("/login", async (req, res, next) => {
   try {
-    const users = await UserModel.find();
-    res.send(users);
+    const { email, password } = req.body;
+    const user = await UserModel.findByCredentials(email, password);
+    const tokens = await authenticate(user);
+    res.send(tokens);
   } catch (error) {
     next(error);
   }
