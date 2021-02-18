@@ -5,7 +5,7 @@ const UserSchema = new Schema({
   username: { type: String, required: true },
   surname: String,
   email: String,
-  password: String,
+  password: { type: String, required: true },
   articles: [{ type: Schema.Types.ObjectId, ref: "Article" }],
 });
 
