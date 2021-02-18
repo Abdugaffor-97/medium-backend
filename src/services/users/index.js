@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { authorize } = require("../auth/middleware");
-const { getAccessAndRefreshToken } = require("../auth/tools");
+const { getAccessAndRefreshToken } = require("../auth");
 const UserModel = require("./schema");
 
 const userRouter = Router();

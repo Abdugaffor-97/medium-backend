@@ -35,12 +35,6 @@ const getAccessAndRefreshToken = async (user) => {
 
     await user.save();
 
-    console.log(`
-    refreshToken
-    ============================
-    ${refreshToken}
-    `);
-
     return { accessToken, refreshToken };
   } catch (error) {
     throw new Error(error);
