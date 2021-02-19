@@ -108,6 +108,11 @@ userRouter.delete("/:id", async (req, res, next) => {
 });
 
 userRouter.get(
+  "/google-login",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+userRouter.get(
   "/google-redirect",
   passport.authenticate("google"),
   async (req, res, next) => {
